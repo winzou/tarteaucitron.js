@@ -535,6 +535,16 @@ var tarteaucitron = {
 
         // piwik consent mode
         if (tarteaucitron.parameters.piwikConsentMode === true) {
+            if (typeof ppms !== 'undefined' && typeof ppms?.cm?.api === 'function') {
+                ppms.cm.api(
+                    'setInitialComplianceSettings',
+                    {
+                        consents: ['analytics']
+                    },
+                    console.log,
+                    console.error
+                );
+            }
             document.addEventListener('piwikpro_consentModeOk', function () {
                 if (typeof ppms !== 'undefined' && typeof ppms?.cm?.api === 'function') {
                     ppms.cm.api(
@@ -554,9 +564,13 @@ var tarteaucitron = {
             document.addEventListener('piwikpro_consentModeKo', function () {
                 if (typeof ppms !== 'undefined' && typeof ppms?.cm?.api === 'function') {
                     ppms.cm.api(
-                        "setInitialComplianceSettings",
+                        'setComplianceSettings',
                         {
-                            consents: ["analytics"],
+                            consents: {
+                                analytics: {
+                                    status: 0
+                                }
+                            }
                         },
                         console.log,
                         console.error
